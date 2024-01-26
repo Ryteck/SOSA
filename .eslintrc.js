@@ -25,6 +25,10 @@ module.exports = {
       files: 'next-env.d.ts',
       rules: { '@typescript-eslint/triple-slash-reference': 'off' },
     },
+    {
+      files: '*.config.js',
+      rules: { '@typescript-eslint/no-var-requires': 'off' },
+    },
   ],
   parserOptions: {
     ecmaVersion: 'latest',
@@ -33,7 +37,10 @@ module.exports = {
   plugins: ['react'],
   settings: { react: { version: 'detect' } },
   rules: {
+    '@typescript-eslint/strict-boolean-expressions': 'off',
+
     // React
+    'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
 
     // Prettier
@@ -44,6 +51,8 @@ module.exports = {
         singleQuote: true,
         arrowParens: 'avoid',
         endOfLine: 'auto',
+
+        plugins: ['prettier-plugin-tailwindcss'],
       },
     ],
   },
