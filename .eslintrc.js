@@ -7,6 +7,8 @@ module.exports = {
   extends: [
     'standard-with-typescript',
     'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:@next/next/recommended',
     'plugin:prettier/recommended',
   ],
   overrides: [
@@ -29,6 +31,7 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['react'],
+  settings: { react: { version: 'detect' } },
   rules: {
     // React
     'react/react-in-jsx-scope': 'off',
