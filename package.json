@@ -1,6 +1,6 @@
 {
   "name": "sosa",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "SOS Alert",
   "main": "index.js",
   "repository": "https://github.com/Ryteck/SOSA.git",
@@ -52,7 +52,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma db push && next build",
     "start": "next start"
   }
 }
