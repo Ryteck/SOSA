@@ -5,6 +5,7 @@ import type { FC, PropsWithChildren } from 'react'
 import { cn } from '@/lib/utils'
 import inter from '@/fonts/inter'
 import { ThemeProvider } from '@/components/components/theme-provider'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export const metadata: Metadata = {
   title: 'SOS Alert',
@@ -25,7 +26,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
         enableSystem
         disableTransitionOnChange
       >
-        {children}
+        <ScrollArea className="h-screen w-screen">{children}</ScrollArea>
       </ThemeProvider>
     </body>
   </html>
