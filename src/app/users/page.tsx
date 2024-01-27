@@ -10,7 +10,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Input } from '@/components/ui/input'
-import { NIL, v4 } from 'uuid'
+import { NIL } from 'uuid'
 import { PlusIcon, TrashIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,17 +20,18 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useIsClient } from '@/hooks/isClient'
-
-interface User {
-  id: string
-  name: string
-  nick: string
-}
+import { useFetcher } from '@/hooks/fetcher'
+import type { User } from '@prisma/client'
+import storeNewUser from '@/actions/storeNewUser'
+import destroyUserById from '@/actions/destroyUserById'
 
 const Page: FC = () => {
   const isClient = useIsClient()
 
-  const [users, setUsers] = useState<User[]>([])
+  const { data, mutate } = useFetcher<User[]>('api/users', {
+    revalidateOnFocus: true,
+    refreshInterval: 10000,
+  })
 
   const [name, setName] = useState('')
   const [nick, setNick] = useState('')
@@ -80,13 +81,13 @@ const Page: FC = () => {
                         variant="outline"
                         size="icon"
                         onClick={() => {
-                          setUsers(state => [
-                            ...state,
-                            { id: v4(), name, nick },
-                          ])
-
-                          setName('')
-                          setNick('')
+                          storeNewUser({ name, nick })
+                            .then(async () => await mutate())
+                            .then(() => {
+                              setName('')
+                              setNick('')
+                            })
+                            .catch(console.error)
                         }}
                       >
                         <PlusIcon className="h-4 w-4" />
@@ -100,7 +101,7 @@ const Page: FC = () => {
               </TableCell>
             </TableRow>
 
-            {users.map(user => (
+            {data?.map(user => (
               <TableRow key={user.id}>
                 <TableCell className="font-medium">{user.id}</TableCell>
                 <TableCell>{user.name}</TableCell>
@@ -113,9 +114,9 @@ const Page: FC = () => {
                           variant="outline"
                           size="icon"
                           onClick={() => {
-                            setUsers(state =>
-                              state.filter(({ id }) => id !== user.id),
-                            )
+                            destroyUserById(user.id)
+                              .then(async () => await mutate())
+                              .catch(console.error)
                           }}
                         >
                           <TrashIcon className="h-4 w-4" />

@@ -37,6 +37,10 @@ module.exports = {
   plugins: ['react'],
   settings: { react: { version: 'detect' } },
   rules: {
+    // General
+    'no-var': 'off',
+
+    // TypeScript
     '@typescript-eslint/strict-boolean-expressions': 'off',
 
     // React
