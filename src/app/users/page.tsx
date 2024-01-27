@@ -24,6 +24,7 @@ import { useFetcher } from '@/hooks/fetcher'
 import type { User } from '@prisma/client'
 import storeNewUser from '@/actions/storeNewUser'
 import destroyUserById from '@/actions/destroyUserById'
+import toast from 'react-hot-toast'
 
 const Page: FC = () => {
   const isClient = useIsClient()
@@ -81,8 +82,17 @@ const Page: FC = () => {
                         variant="outline"
                         size="icon"
                         onClick={() => {
-                          storeNewUser({ name, nick })
-                            .then(async () => await mutate())
+                          toast
+                            .promise(
+                              storeNewUser({ name, nick }).then(
+                                async () => await mutate(),
+                              ),
+                              {
+                                loading: 'creating user, please wait...',
+                                success: 'user created',
+                                error: 'unknown error',
+                              },
+                            )
                             .then(() => {
                               setName('')
                               setNick('')
@@ -114,8 +124,21 @@ const Page: FC = () => {
                           variant="outline"
                           size="icon"
                           onClick={() => {
-                            destroyUserById(user.id)
-                              .then(async () => await mutate())
+                            toast
+                              .promise(
+                                destroyUserById(user.id).then(
+                                  async () => await mutate(),
+                                ),
+                                {
+                                  loading: 'deleting user, please wait...',
+                                  success: 'user deleted',
+                                  error: 'unknown error',
+                                },
+                              )
+                              .then(() => {
+                                setName('')
+                                setNick('')
+                              })
                               .catch(console.error)
                           }}
                         >

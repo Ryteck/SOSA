@@ -2,10 +2,9 @@ import '@/styles/tailwind.css'
 
 import type { Metadata } from 'next'
 import type { FC, PropsWithChildren } from 'react'
-import { cn } from '@/lib/utils'
-import inter from '@/fonts/inter'
 import { ThemeProvider } from '@/components/components/theme-provider'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
   title: 'SOS Alert',
@@ -14,12 +13,7 @@ export const metadata: Metadata = {
 
 const Layout: FC<PropsWithChildren> = ({ children }) => (
   <html lang="en" suppressHydrationWarning>
-    <body
-      className={cn(
-        'min-h-screen bg-background font-sans antialiased',
-        inter.className,
-      )}
-    >
+    <body className="min-h-screen bg-background antialiased">
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -28,6 +22,8 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
       >
         <ScrollArea className="h-screen w-screen">{children}</ScrollArea>
       </ThemeProvider>
+
+      <Toaster position="top-right" />
     </body>
   </html>
 )
