@@ -1,11 +1,11 @@
 import type { FC } from 'react'
-import { ThemeModeToggle } from '@/components/components/theme-mode-toggle'
+import { getServerSession } from 'next-auth'
+import authOptions from '@/settings/authOptions'
+import { redirect } from 'next/navigation'
 
-const Page: FC = () => (
-  <main className="flex h-screen w-screen items-center justify-center gap-4">
-    <h2>Hello, World!</h2>
-    <ThemeModeToggle />
-  </main>
-)
+const Page: FC = async () => {
+  const session = await getServerSession(authOptions)
+  redirect(session === null ? '/login' : '/users')
+}
 
 export default Page

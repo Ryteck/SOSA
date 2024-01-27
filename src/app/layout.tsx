@@ -2,7 +2,7 @@ import '@/styles/tailwind.css'
 
 import type { Metadata } from 'next'
 import type { FC, PropsWithChildren } from 'react'
-import { ThemeProvider } from '@/components/components/theme-provider'
+import { ThemeProvider } from '@/components/theme-provider'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Toaster } from 'react-hot-toast'
 
@@ -23,7 +23,7 @@ const Layout: FC<PropsWithChildren> = ({ children }) => (
         <ScrollArea className="h-screen w-screen">{children}</ScrollArea>
       </ThemeProvider>
 
-      <Toaster position="top-right" />
+      <Toaster position="bottom-right" />
     </body>
   </html>
 )
