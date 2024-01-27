@@ -1,6 +1,6 @@
 'use client'
 
-import { type FC, useState } from 'react'
+import type { FC } from 'react'
 import {
   Table,
   TableBody,
@@ -25,6 +25,21 @@ import type { User } from '@prisma/client'
 import storeNewUser from '@/actions/storeNewUser'
 import destroyUserById from '@/actions/destroyUserById'
 import toast from 'react-hot-toast'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const formSchema = z.object({
+  name: z.string().min(1),
+  nick: z.string().min(1),
+})
 
 const Page: FC = () => {
   const isClient = useIsClient()
@@ -34,127 +49,140 @@ const Page: FC = () => {
     refreshInterval: 10000,
   })
 
-  const [name, setName] = useState('')
-  const [nick, setNick] = useState('')
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      nick: '',
+    },
+  })
+
+  const onSubmit = form.handleSubmit(data => {
+    form.reset()
+
+    toast
+      .promise(
+        storeNewUser(data).then(async () => await mutate()),
+        {
+          loading: 'creating user, please wait...',
+          success: 'user created',
+          error: 'unknown error',
+        },
+      )
+      .catch(console.error)
+  })
 
   return (
     <>
       {isClient && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[380px]">ID</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Nick</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium text-primary/20">
-                {NIL}
-              </TableCell>
-              <TableCell>
-                <Input
-                  placeholder="Type a name"
-                  value={name}
-                  onChange={e => {
-                    setName(e.target.value)
-                  }}
-                />
-              </TableCell>
+        <Form {...form}>
+          <form onSubmit={onSubmit}>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[380px]">ID</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Nick</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow>
+                  <TableCell className="font-medium text-primary/20">
+                    {NIL}
+                  </TableCell>
 
-              <TableCell>
-                <Input
-                  placeholder="Type a nick"
-                  value={nick}
-                  onChange={e => {
-                    setNick(e.target.value)
-                  }}
-                />
-              </TableCell>
+                  <TableCell>
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input placeholder="Type a name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TableCell>
 
-              <TableCell className="text-right">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        onClick={() => {
-                          toast
-                            .promise(
-                              storeNewUser({ name, nick }).then(
-                                async () => await mutate(),
-                              ),
-                              {
-                                loading: 'creating user, please wait...',
-                                success: 'user created',
-                                error: 'unknown error',
-                              },
-                            )
-                            .then(() => {
-                              setName('')
-                              setNick('')
-                            })
-                            .catch(console.error)
-                        }}
-                      >
-                        <PlusIcon className="h-4 w-4" />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Add to list</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </TableCell>
-            </TableRow>
+                  <TableCell>
+                    <FormField
+                      control={form.control}
+                      name="nick"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <Input placeholder="Type a nick" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TableCell>
 
-            {data?.map(user => (
-              <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.id}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.nick}</TableCell>
-                <TableCell className="text-right">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Button
-                          variant="outline"
-                          size="icon"
-                          onClick={() => {
-                            toast
-                              .promise(
-                                destroyUserById(user.id).then(
-                                  async () => await mutate(),
-                                ),
-                                {
-                                  loading: 'deleting user, please wait...',
-                                  success: 'user deleted',
-                                  error: 'unknown error',
-                                },
-                              )
-                              .then(() => {
-                                setName('')
-                                setNick('')
-                              })
-                              .catch(console.error)
-                          }}
-                        >
-                          <TrashIcon className="h-4 w-4" />
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Delete</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+                  <TableCell className="text-right">
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <Button variant="outline" size="icon" type="submit">
+                            <PlusIcon className="h-4 w-4" />
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>Add to list</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </TableCell>
+                </TableRow>
+
+                {data?.map(user => (
+                  <TableRow key={user.id}>
+                    <TableCell className="font-medium">{user.id}</TableCell>
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.nick}</TableCell>
+                    <TableCell className="text-right">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              type="button"
+                              onClick={e => {
+                                e.preventDefault()
+
+                                toast
+                                  .promise(
+                                    destroyUserById(user.id).then(
+                                      async () => await mutate(),
+                                    ),
+                                    {
+                                      loading: 'deleting user, please wait...',
+                                      success: 'user deleted',
+                                      error: 'unknown error',
+                                    },
+                                  )
+                                  .catch(console.error)
+                              }}
+                            >
+                              <TrashIcon className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Delete</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </form>
+        </Form>
       )}
     </>
   )

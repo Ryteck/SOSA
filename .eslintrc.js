@@ -41,6 +41,7 @@ module.exports = {
     'no-var': 'off',
 
     // TypeScript
+    '@typescript-eslint/no-misused-promises': 'off',
     '@typescript-eslint/strict-boolean-expressions': 'off',
 
     // React
