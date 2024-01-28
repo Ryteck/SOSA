@@ -68,7 +68,7 @@ export const ConfigureSession: FC<Props> = ({ sessionId }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Edit session</DialogTitle>
-          <DialogDescription>tururu, colocar descrição</DialogDescription>
+          <DialogDescription>Available session locations</DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-2">

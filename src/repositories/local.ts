@@ -13,6 +13,7 @@ const listAllLocationsBySessionId = async (
 ): Promise<Local[]> =>
   await localModel.findMany({
     where: { sessions: { some: { id: sessionId } } },
+    orderBy: { name: 'asc' },
   })
 
 const storeNewLocal = async (data: Omit<Local, 'id'>): Promise<Local> =>

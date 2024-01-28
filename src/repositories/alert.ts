@@ -5,4 +5,8 @@ const alertModel = prismaClient.alert
 
 const listAllAlerts = async (): Promise<Alert[]> => await alertModel.findMany()
 
-export const alertRepository = { listAllAlerts }
+const storeNewAlert = async (
+  data: Omit<Alert, 'id' | 'userId' | 'createdAt'>,
+): Promise<Alert> => await alertModel.create({ data })
+
+export const alertRepository = { listAllAlerts, storeNewAlert }
