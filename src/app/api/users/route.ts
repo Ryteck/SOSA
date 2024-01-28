@@ -1,7 +1,7 @@
 import { userRepository } from '@/repositories/user'
 
 export async function GET(): Promise<Response> {
-  const users = await userRepository.listAll()
+  const users = await userRepository.listAllUsers()
   return Response.json(users)
 }
 

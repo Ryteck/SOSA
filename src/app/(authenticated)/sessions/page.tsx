@@ -2,11 +2,11 @@
 
 import type { FC } from 'react'
 import { useIsClient } from '@/hooks/isClient'
-import { UserTable } from '@/components/tables/user-table'
+import { SessionTable } from '@/components/tables/session-table'
 
 const Page: FC = () => {
   const isClient = useIsClient()
-  return <>{isClient && <UserTable />}</>
+  return <>{isClient && <SessionTable />}</>
 }
 
 export default Page
