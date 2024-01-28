@@ -12,9 +12,10 @@ datasource db {
 }
 
 model User {
-  id   String @id @default(uuid())
-  name String
-  nick String @unique
+  id       String @id @default(uuid())
+  name     String
+  nick     String @unique
+  password String
 
   alerts Alert[]
 
@@ -23,7 +24,7 @@ model User {
 
 model Person {
   id      String @id @default(uuid())
-  name    String @unique
+  name    String
   details String
 
   sessions Session[]
@@ -33,7 +34,7 @@ model Person {
 
 model Local {
   id      String @id @default(uuid())
-  name    String @unique
+  name    String
   details String
 
   sessions Session[]

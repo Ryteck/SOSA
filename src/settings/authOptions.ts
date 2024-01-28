@@ -1,6 +1,8 @@
 import type { AuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { NIL } from 'uuid'
+import { userRepository } from '@/repositories/user'
+import { compareHash } from '@/lib/hash'
+import * as process from 'process'
 
 const authOptions: AuthOptions = {
   providers: [
@@ -21,10 +23,16 @@ const authOptions: AuthOptions = {
       async authorize(credentials) {
         if (!credentials) return null
 
-        if (credentials.nick === 'sosa' && credentials.password === 'sosa')
-          return { id: NIL }
+        if (credentials.nick === '')
+          return credentials.password === String(process.env.BLANK_PASSWORD)
+            ? { id: 'blank' }
+            : null
 
-        return null
+        const user = await userRepository.getUserByNick(credentials.nick)
+
+        return compareHash(credentials.password, user.password)
+          ? { id: user.id }
+          : null
       },
     }),
   ],
