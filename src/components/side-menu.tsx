@@ -37,12 +37,21 @@ export const SideMenu: FC = () => {
 
             <div className="my-8 flex flex-col gap-2">
               <Button
-                disabled={pathname === '/clients'}
+                disabled={pathname === '/alerts'}
                 onClick={() => {
-                  router.push('/clients')
+                  router.push('/alerts')
                 }}
               >
-                Clients
+                Alerts
+              </Button>
+
+              <Button
+                disabled={pathname === '/controller'}
+                onClick={() => {
+                  router.push('/controller')
+                }}
+              >
+                Controller
               </Button>
 
               <Button
@@ -52,6 +61,15 @@ export const SideMenu: FC = () => {
                 }}
               >
                 Sessions
+              </Button>
+
+              <Button
+                disabled={pathname === '/clients'}
+                onClick={() => {
+                  router.push('/clients')
+                }}
+              >
+                Clients
               </Button>
 
               <Button

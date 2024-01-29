@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation'
 
 const Page: FC = async () => {
   const session = await getServerSession(authOptions)
-  redirect(session === null ? '/login' : '/users')
+  redirect(session === null ? '/login' : '/alerts')
 }
 
 export default Page

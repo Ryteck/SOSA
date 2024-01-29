@@ -15,10 +15,11 @@ const getFullSessionDataById = async (id: string): Promise<FullSessionData> =>
       locations: { select: { id: true, name: true, details: true } },
       alerts: {
         select: {
+          id: true,
           details: true,
           createdAt: true,
           local: { select: { name: true, details: true } },
-          user: { select: { name: true } },
+          user: { select: { id: true, name: true } },
         },
       },
     },

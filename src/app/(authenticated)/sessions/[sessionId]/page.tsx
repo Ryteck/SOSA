@@ -30,7 +30,7 @@ const Page: FC<Params> = async ({ params }) => {
       <h2 className="mt-2 text-center text-2xl font-bold">{person.name}</h2>
 
       <div className="m-12 aspect-square h-fit w-fit bg-white p-1">
-        <QRCodeSVG className="h-[512px] w-[512px]" value={url} />
+        <QRCodeSVG className="h-[320px] w-[320px]" value={url} />
       </div>
 
       <CopyClipboard value={url} />

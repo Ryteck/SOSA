@@ -121,107 +121,115 @@ const Page: FC<Params> = ({ params }) => {
   }
 
   return (
-    <main className="flex h-screen w-screen flex-col items-center gap-8 pt-16 text-center">
-      <h2 className="text-3xl font-bold">{data?.person.name}</h2>
+    <ScrollArea className="h-screen w-screen">
+      <main className="flex h-full w-full flex-col items-center gap-8 pt-8 text-center">
+        <h2 className="text-3xl font-bold">{data?.person.name}</h2>
 
-      {data?.alerts.length === 0 ? (
-        <>
-          <ScrollArea className="w-4/5">
-            <Card className="p-8">
-              {data.locations.length === 0 ? (
-                <Skeleton className="m-auto h-40 w-40" />
-              ) : (
-                <ToggleGroup
-                  variant="outline"
-                  type="single"
-                  value={selectedLocal}
-                  onValueChange={setSelectedLocal}
-                >
-                  {data.locations.map(local => (
-                    <ToggleGroupItem
-                      key={local.id}
-                      value={local.id}
-                      aria-label="Toggle bold"
-                      className="flex h-full flex-col"
-                    >
-                      <p className="text-2xl font-bold">{local.name}</p>
-                      <p className="opacity-50">{local.details}</p>
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
-              )}
-            </Card>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
+        {data?.alerts.length === 0 ? (
+          <>
+            <ScrollArea className="w-4/5">
+              <Card className="p-8">
+                {data.locations.length === 0 ? (
+                  <Skeleton className="m-auto h-40 w-40" />
+                ) : (
+                  <ToggleGroup
+                    variant="outline"
+                    type="single"
+                    value={selectedLocal}
+                    onValueChange={setSelectedLocal}
+                  >
+                    {data.locations.map(local => (
+                      <ToggleGroupItem
+                        key={local.id}
+                        value={local.id}
+                        aria-label="Toggle bold"
+                        className="flex h-full flex-col"
+                      >
+                        <p className="text-2xl font-bold">{local.name}</p>
+                        <p className="opacity-50">{local.details}</p>
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                )}
+              </Card>
+              <ScrollBar orientation="horizontal" />
+            </ScrollArea>
 
-          <h2 className="text-3xl font-bold">
-            {selectedLocal !== ''
-              ? `${data?.locations.find(arg => arg.id === selectedLocal)?.name} selected`
-              : 'No location selected'}
-          </h2>
+            <h2 className="text-3xl font-bold">
+              {selectedLocal !== ''
+                ? `${data?.locations.find(arg => arg.id === selectedLocal)?.name} selected`
+                : 'No location selected'}
+            </h2>
 
-          <Textarea
-            className="w-5/6"
-            placeholder="Type your message here."
-            value={details}
-            onChange={e => {
-              setDetails(e.target.value)
-            }}
-          />
+            <Textarea
+              className="w-5/6"
+              placeholder="Type your message here."
+              value={details}
+              onChange={e => {
+                setDetails(e.target.value)
+              }}
+            />
 
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                className="h-60 w-60 flex-col rounded-full"
-                disabled={selectedLocal === ''}
-              >
-                <LightningBoltIcon className="h-40 w-40" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Confirm?</DialogTitle>
-                <DialogDescription>
-                  Do you confirm the opening of SOS?
-                </DialogDescription>
-              </DialogHeader>
-
-              <div>{details}</div>
-
-              <DialogFooter>
+            <Dialog>
+              <DialogTrigger asChild>
                 <Button
-                  onClick={() => {
-                    setDetails('')
-                    setSelectedLocal('')
-
-                    toast
-                      .promise(
-                        storeNewAlert({
-                          sessionId: params.sessionId,
-                          localId: selectedLocal,
-                          details,
-                        }).then(async () => await mutate()),
-                        {
-                          loading: 'opening alert, please wait...',
-                          success: 'alert opened',
-                          error: 'unknown error',
-                        },
-                      )
-                      .catch(console.error)
+                  className="flex-col rounded-full"
+                  style={{
+                    minWidth: '15rem',
+                    minHeight: '15rem',
+                    maxWidth: '15rem',
+                    maxHeight: '15rem',
                   }}
+                  disabled={selectedLocal === ''}
                 >
-                  Confirm
+                  <LightningBoltIcon className="h-40 w-40" />
                 </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </>
-      ) : (
-        data !== undefined && <Alert {...data.alerts[0]} />
-      )}
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Confirm?</DialogTitle>
+                  <DialogDescription>
+                    Do you confirm the opening of SOS?
+                  </DialogDescription>
+                </DialogHeader>
 
-      <ThemeModeToggle />
-    </main>
+                <div>{details}</div>
+
+                <DialogFooter>
+                  <Button
+                    onClick={() => {
+                      setDetails('')
+                      setSelectedLocal('')
+
+                      toast
+                        .promise(
+                          storeNewAlert({
+                            sessionId: params.sessionId,
+                            localId: selectedLocal,
+                            details,
+                          }).then(async () => await mutate()),
+                          {
+                            loading: 'opening alert, please wait...',
+                            success: 'alert opened',
+                            error: 'unknown error',
+                          },
+                        )
+                        .catch(console.error)
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </>
+        ) : (
+          data !== undefined && <Alert {...data.alerts[0]} />
+        )}
+
+        <ThemeModeToggle />
+      </main>
+    </ScrollArea>
   )
 }
 
