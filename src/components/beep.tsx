@@ -22,5 +22,5 @@ export const Beep: FC<Props> = ({ enable }) => {
     }
   }, [])
 
-  return <span>audio</span>
+  return <></>
 }
