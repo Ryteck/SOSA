@@ -8,10 +8,7 @@ interface Params {
 }
 
 const Page: FC<Params> = async ({ params }) => {
-  const vercelUrl = process.env.VERCEL_URL
-
-  const baseUrl =
-    vercelUrl !== undefined ? `https://${vercelUrl}` : process.env.NEXTAUTH_URL
+  const baseUrl = process.env.PROD_URL ?? process.env.NEXTAUTH_URL
 
   if (baseUrl === undefined) {
     return (
