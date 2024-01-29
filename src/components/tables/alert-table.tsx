@@ -30,6 +30,7 @@ import {
 } from '@/components/ui/select'
 import type { User } from '@prisma/client'
 import updateAlertUserById from '@/actions/updateAlertUserById'
+import { Beep } from '@/components/beep'
 
 const pad2 = (arg: number): string => arg.toString().padStart(2, '0')
 
@@ -119,10 +120,13 @@ interface Props {
 }
 
 export const AlertTable: FC<Props> = ({ controllerMode }) => {
-  const { data, mutate } = useFetcher<AlertDetailsWithSession[]>('api/alerts', {
-    revalidateOnFocus: true,
-    refreshInterval: 5000,
-  })
+  const { data, mutate, isLoading } = useFetcher<AlertDetailsWithSession[]>(
+    'api/alerts',
+    {
+      revalidateOnFocus: true,
+      refreshInterval: 5000,
+    },
+  )
 
   const { data: users } = useFetcher<Array<Omit<User, 'password'>>>(
     'api/users',
@@ -131,6 +135,20 @@ export const AlertTable: FC<Props> = ({ controllerMode }) => {
       refreshInterval: 10000,
     },
   )
+
+  const [isBeepEnable, setIsBeepEnable] = useState(false)
+
+  useEffect(() => {
+    if (isLoading || isBeepEnable) return
+
+    const interval = setInterval(() => {
+      setIsBeepEnable(true)
+    }, 3000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [isLoading])
 
   return (
     <Table>
@@ -149,6 +167,8 @@ export const AlertTable: FC<Props> = ({ controllerMode }) => {
       <TableBody>
         {data?.map(alert => (
           <TableRow key={alert.id}>
+            <Beep enable={isBeepEnable} />
+
             <TableCell>
               <p className="text-xl font-bold">{alert.session.person.name}</p>
               <p className="opacity-50">{alert.session.person.details}</p>

@@ -8,7 +8,8 @@ interface Params {
 }
 
 const Page: FC<Params> = async ({ params }) => {
-  const baseUrl = process.env.PROD_URL ?? process.env.NEXTAUTH_URL
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  const baseUrl = process.env.PROD_URL || process.env.NEXTAUTH_URL
 
   if (baseUrl === undefined) {
     return (
