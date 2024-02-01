@@ -103,6 +103,8 @@ const Page: FC<Params> = ({ params }) => {
     setSelectedLocal(state =>
       data?.locations.map(({ id }) => id).includes(state) ? state : '',
     )
+
+    if (data?.locations.length === 1) setSelectedLocal(data.locations[0].id)
   }, [data, isLoading])
 
   if (isLoading)

@@ -1,6 +1,6 @@
 {
   "name": "sosa",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "SOS Alert",
   "main": "index.js",
   "repository": "https://github.com/Ryteck/SOSA.git",
