@@ -1,11 +1,11 @@
-'use server'
+"use server";
 
-import type { Alert } from '@prisma/client'
-import { alertRepository } from '@/repositories/alert'
+import { alertRepository } from "@/repositories/alert";
+import type { Alert } from "@prisma/client";
 
 export default async function updateAlertUserById(
-  id: string,
-  userId: string,
+	id: string,
+	userId: string,
 ): Promise<Alert> {
-  return await alertRepository.updateAlertUserById(id, userId)
+	return await alertRepository.updateAlertUserById(id, userId);
 }

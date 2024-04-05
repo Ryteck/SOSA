@@ -1,13 +1,13 @@
-import type { FC, PropsWithChildren } from 'react'
-import { getServerSession } from 'next-auth'
-import authOptions from '@/settings/authOptions'
-import { redirect } from 'next/navigation'
+import authOptions from "@/settings/authOptions";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import type { FC, PropsWithChildren } from "react";
 
 const Layout: FC<PropsWithChildren> = async ({ children }) => {
-  const session = await getServerSession(authOptions)
-  if (session !== null) redirect('/')
+	const session = await getServerSession(authOptions);
+	if (session !== null) redirect("/");
 
-  return <>{children}</>
-}
+	return <>{children}</>;
+};
 
-export default Layout
+export default Layout;

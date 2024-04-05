@@ -1,10 +1,10 @@
-'use server'
+"use server";
 
-import type { Local } from '@prisma/client'
-import { localRepository } from '@/repositories/local'
+import { localRepository } from "@/repositories/local";
+import type { Local } from "@prisma/client";
 
 export default async function storeNewLocal(
-  data: Omit<Local, 'id'>,
+	data: Omit<Local, "id">,
 ): Promise<Local> {
-  return await localRepository.storeNewLocal(data)
+	return await localRepository.storeNewLocal(data);
 }

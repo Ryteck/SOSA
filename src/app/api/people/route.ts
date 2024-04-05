@@ -1,8 +1,8 @@
-import { personRepository } from '@/repositories/person'
+import { personRepository } from "@/repositories/person";
 
 export async function GET(): Promise<Response> {
-  const people = await personRepository.listAllPeople()
-  return Response.json(people)
+	const people = await personRepository.listAllPeople();
+	return Response.json(people);
 }
 
-export const revalidate = 0
+export const revalidate = 0;

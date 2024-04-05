@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import type { FC } from 'react'
-import { useIsClient } from '@/hooks/isClient'
-import { UserTable } from '@/components/tables/user-table'
+import { UserTable } from "@/components/tables/user-table";
+import { useIsClient } from "@/hooks/isClient";
+import type { FC } from "react";
 
 const Page: FC = () => {
-  const isClient = useIsClient()
-  return <>{isClient && <UserTable />}</>
-}
+	const isClient = useIsClient();
+	return <>{isClient && <UserTable />}</>;
+};
 
-export default Page
+export default Page;

@@ -1,8 +1,8 @@
-'use server'
+"use server";
 
-import type { Session } from '@prisma/client'
-import { sessionRepository } from '@/repositories/session'
+import { sessionRepository } from "@/repositories/session";
+import type { Session } from "@prisma/client";
 
 export default async function destroySessionById(id: string): Promise<Session> {
-  return await sessionRepository.destroySessionById(id)
+	return await sessionRepository.destroySessionById(id);
 }

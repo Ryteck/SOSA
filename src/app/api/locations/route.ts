@@ -1,8 +1,8 @@
-import { localRepository } from '@/repositories/local'
+import { localRepository } from "@/repositories/local";
 
 export async function GET(): Promise<Response> {
-  const locations = await localRepository.listAllLocations()
-  return Response.json(locations)
+	const locations = await localRepository.listAllLocations();
+	return Response.json(locations);
 }
 
-export const revalidate = 0
+export const revalidate = 0;

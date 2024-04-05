@@ -1,10 +1,10 @@
-'use server'
+"use server";
 
-import type { Session } from '@prisma/client'
-import { sessionRepository } from '@/repositories/session'
+import { sessionRepository } from "@/repositories/session";
+import type { Session } from "@prisma/client";
 
 export default async function storeNewSession(
-  data: Omit<Session, 'id'>,
+	data: Omit<Session, "id">,
 ): Promise<Session> {
-  return await sessionRepository.storeNewSession(data)
+	return await sessionRepository.storeNewSession(data);
 }

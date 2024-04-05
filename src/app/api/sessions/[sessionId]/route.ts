@@ -1,23 +1,23 @@
-import { sessionRepository } from '@/repositories/session'
+import { sessionRepository } from "@/repositories/session";
 
 interface Params {
-  params: { sessionId: string }
+	params: { sessionId: string };
 }
 
 export async function GET(
-  request: Request,
-  { params }: Params,
+	request: Request,
+	{ params }: Params,
 ): Promise<Response> {
-  try {
-    const session = await sessionRepository.getFullSessionDataById(
-      params.sessionId,
-    )
+	try {
+		const session = await sessionRepository.getFullSessionDataById(
+			params.sessionId,
+		);
 
-    return Response.json(session)
-  } catch (e) {
-    console.error(e)
-    return Response.json(null)
-  }
+		return Response.json(session);
+	} catch (e) {
+		console.error(e);
+		return Response.json(null);
+	}
 }
 
-export const revalidate = 0
+export const revalidate = 0;

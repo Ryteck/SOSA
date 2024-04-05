@@ -1,8 +1,8 @@
-'use server'
+"use server";
 
-import type { Alert } from '@prisma/client'
-import { alertRepository } from '@/repositories/alert'
+import { alertRepository } from "@/repositories/alert";
+import type { Alert } from "@prisma/client";
 
 export default async function destroyAlertById(id: string): Promise<Alert> {
-  return await alertRepository.destroyAlertById(id)
+	return await alertRepository.destroyAlertById(id);
 }

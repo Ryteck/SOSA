@@ -1,26 +1,26 @@
-'use client'
+"use client";
 
-import { type FC, useEffect } from 'react'
+import { type FC, useEffect } from "react";
 
 interface Props {
-  enable: boolean
+	enable: boolean;
 }
 
 export const Beep: FC<Props> = ({ enable }) => {
-  useEffect(() => {
-    const beep = new Audio('/assets/audios/drop.mp3')
+	useEffect(() => {
+		const beep = new Audio("/assets/audios/drop.mp3");
 
-    const playBeep = (): void => {
-      beep.play().catch(console.error)
-    }
+		const playBeep = (): void => {
+			beep.play().catch(console.error);
+		};
 
-    if (enable) playBeep()
+		if (enable) playBeep();
 
-    return () => {
-      beep.pause()
-      beep.currentTime = 0
-    }
-  }, [])
+		return () => {
+			beep.pause();
+			beep.currentTime = 0;
+		};
+	}, [enable]);
 
-  return <></>
-}
+	return <></>;
+};

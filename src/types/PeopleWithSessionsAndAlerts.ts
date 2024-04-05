@@ -1,6 +1,6 @@
-import type { Person } from '@prisma/client'
+import type { Person } from "@prisma/client";
 
 export default interface PersonWithSession extends Person {
-  sessionId?: string
-  alertId?: string
+	sessionId?: string;
+	alertId?: string;
 }

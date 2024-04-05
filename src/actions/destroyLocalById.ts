@@ -1,8 +1,8 @@
-'use server'
+"use server";
 
-import type { Local } from '@prisma/client'
-import { localRepository } from '@/repositories/local'
+import { localRepository } from "@/repositories/local";
+import type { Local } from "@prisma/client";
 
 export default async function destroyLocalById(id: string): Promise<Local> {
-  return await localRepository.destroyLocalById(id)
+	return await localRepository.destroyLocalById(id);
 }

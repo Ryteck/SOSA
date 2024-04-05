@@ -1,10 +1,10 @@
-'use server'
+"use server";
 
-import type { Person } from '@prisma/client'
-import { personRepository } from '@/repositories/person'
+import { personRepository } from "@/repositories/person";
+import type { Person } from "@prisma/client";
 
 export default async function storeNewPerson(
-  data: Omit<Person, 'id'>,
+	data: Omit<Person, "id">,
 ): Promise<Person> {
-  return await personRepository.storeNewPerson(data)
+	return await personRepository.storeNewPerson(data);
 }

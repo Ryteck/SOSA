@@ -1,13 +1,13 @@
-import { createHash } from 'crypto'
+import { createHash } from "node:crypto";
 
-const HASH_ROUNDS = Number(process.env.HASH_ROUNDS)
-const HASH_SECRET = String(process.env.HASH_SECRET)
+const HASH_ROUNDS = Number(process.env.HASH_ROUNDS);
+const HASH_SECRET = String(process.env.HASH_SECRET);
 
 const hash = (args: string): string =>
-  createHash('sha256').update(args).digest('hex')
+	createHash("sha256").update(args).digest("hex");
 
 export const generateHash = (args: string): string =>
-  Array.from({ length: HASH_ROUNDS }).reduce(hash, `${HASH_SECRET}&${args}`)
+	Array.from({ length: HASH_ROUNDS }).reduce(hash, `${HASH_SECRET}&${args}`);
 
 export const compareHash = (text: string, hash: string): boolean =>
-  generateHash(text) === hash
+	generateHash(text) === hash;

@@ -1,11 +1,11 @@
-'use server'
+"use server";
 
-import type { Session } from '@prisma/client'
-import { sessionRepository } from '@/repositories/session'
+import { sessionRepository } from "@/repositories/session";
+import type { Session } from "@prisma/client";
 
 export default async function setLocationsById(
-  id: string,
-  locationIds: string[],
+	id: string,
+	locationIds: string[],
 ): Promise<Session> {
-  return await sessionRepository.setLocationsById(id, locationIds)
+	return await sessionRepository.setLocationsById(id, locationIds);
 }
