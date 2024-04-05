@@ -32,6 +32,14 @@ model Person {
   @@map("people")
 }
 
+model Campus {
+  id String @id @default(uuid())
+
+  name String
+
+  @@map("campus")
+}
+
 model Local {
   id      String @id @default(uuid())
   name    String

@@ -55,6 +55,15 @@ export const SideMenu: FC = () => {
 							</Button>
 
 							<Button
+								disabled={pathname === "/campus"}
+								onClick={() => {
+									router.push("/campus");
+								}}
+							>
+								Campus
+							</Button>
+
+							<Button
 								disabled={pathname === "/sessions"}
 								onClick={() => {
 									router.push("/sessions");
