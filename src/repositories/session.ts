@@ -17,7 +17,7 @@ const getFullSessionDataById = async (id: string): Promise<FullSessionData> =>
 					id: true,
 					name: true,
 					details: true,
-					campus: { select: { name: true } },
+					campus: true,
 				},
 			},
 			alerts: {
@@ -25,7 +25,7 @@ const getFullSessionDataById = async (id: string): Promise<FullSessionData> =>
 					id: true,
 					details: true,
 					createdAt: true,
-					local: { select: { name: true, details: true } },
+					local: { select: { name: true, details: true, campus: true } },
 					user: { select: { id: true, name: true } },
 				},
 			},
