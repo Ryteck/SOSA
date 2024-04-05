@@ -91,7 +91,9 @@ export const ConfigureSession: FC<Props> = ({ sessionId }) => {
 									className="flex items-center gap-2 text-lg"
 									htmlFor={checkId}
 								>
-									<p>{local.name}</p>
+									<p>
+										{local.campus.name} - {local.name}
+									</p>
 									<p className="text-xs opacity-40">{local.details}</p>
 								</Label>
 							</div>

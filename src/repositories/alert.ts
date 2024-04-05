@@ -12,7 +12,13 @@ const listAllDetailAlerts = async (): Promise<AlertDetailsWithSession[]> =>
 			id: true,
 			details: true,
 			createdAt: true,
-			local: { select: { name: true, details: true } },
+			local: {
+				select: {
+					name: true,
+					details: true,
+					campus: true,
+				},
+			},
 			user: { select: { id: true, name: true } },
 			session: {
 				select: { person: { select: { name: true, details: true } } },

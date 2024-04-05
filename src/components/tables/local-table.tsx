@@ -12,6 +12,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import {
 	Table,
 	TableBody,
 	TableCell,
@@ -26,8 +33,9 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFetcher } from "@/hooks/fetcher";
+import type LocalDetails from "@/types/LocalDetails";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Local } from "@prisma/client";
+import type { Campus } from "@prisma/client";
 import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import type { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -37,10 +45,16 @@ import * as z from "zod";
 const formSchema = z.object({
 	name: z.string().min(1),
 	details: z.string(),
+	campusId: z.string(),
 });
 
 export const LocalTable: FC = () => {
-	const { data, mutate } = useFetcher<Local[]>("api/locations", {
+	const { data, mutate } = useFetcher<LocalDetails[]>("api/locations", {
+		revalidateOnFocus: true,
+		refreshInterval: 10000,
+	});
+
+	const { data: campus } = useFetcher<Campus[]>("api/campus", {
 		revalidateOnFocus: true,
 		refreshInterval: 10000,
 	});
@@ -76,6 +90,7 @@ export const LocalTable: FC = () => {
 						<TableRow>
 							<TableHead>Local Name</TableHead>
 							<TableHead>Local Details</TableHead>
+							<TableHead>Campus</TableHead>
 							<TableHead className="text-right">Actions</TableHead>
 						</TableRow>
 					</TableHeader>
@@ -111,6 +126,35 @@ export const LocalTable: FC = () => {
 								/>
 							</TableCell>
 
+							<TableCell>
+								<FormField
+									control={form.control}
+									name="campusId"
+									render={({ field }) => (
+										<FormItem>
+											<Select
+												onValueChange={field.onChange}
+												defaultValue={field.value}
+											>
+												<FormControl>
+													<SelectTrigger>
+														<SelectValue placeholder="Select a campus" />
+													</SelectTrigger>
+												</FormControl>
+												<SelectContent>
+													{campus?.map((arg) => (
+														<SelectItem key={arg.id} value={arg.id}>
+															{arg.name}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</TableCell>
+
 							<TableCell className="text-right">
 								<TooltipProvider>
 									<Tooltip>
@@ -131,6 +175,9 @@ export const LocalTable: FC = () => {
 							<TableRow key={local.id}>
 								<TableCell className="font-medium">{local.name}</TableCell>
 								<TableCell>{local.details}</TableCell>
+
+								<TableCell>{local.campus.name}</TableCell>
+
 								<TableCell className="text-right">
 									<TooltipProvider>
 										<Tooltip>

@@ -12,7 +12,14 @@ const getFullSessionDataById = async (id: string): Promise<FullSessionData> =>
 		where: { id },
 		include: {
 			person: { select: { name: true, details: true } },
-			locations: { select: { id: true, name: true, details: true } },
+			locations: {
+				select: {
+					id: true,
+					name: true,
+					details: true,
+					campus: { select: { name: true } },
+				},
+			},
 			alerts: {
 				select: {
 					id: true,

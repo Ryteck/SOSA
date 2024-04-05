@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useFetcher } from "@/hooks/fetcher";
 import type AlertDetailsWithSession from "@/types/AlertDetailsWithSession";
-import type { User } from "@prisma/client";
+import type { Campus, User } from "@prisma/client";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { type FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -127,6 +127,11 @@ export const AlertTable: FC<Props> = ({ controllerMode }) => {
 		},
 	);
 
+	const { data: campus } = useFetcher<Campus[]>("api/campus", {
+		revalidateOnFocus: true,
+		refreshInterval: 10000,
+	});
+
 	const { data: users } = useFetcher<Array<Omit<User, "password">>>(
 		"api/users",
 		{
@@ -136,6 +141,7 @@ export const AlertTable: FC<Props> = ({ controllerMode }) => {
 	);
 
 	const [isBeepEnable, setIsBeepEnable] = useState(false);
+	const [selectedCampus, setSelectedCampus] = useState<string>();
 
 	useEffect(() => {
 		if (isLoading || isBeepEnable) return;
@@ -154,6 +160,20 @@ export const AlertTable: FC<Props> = ({ controllerMode }) => {
 			<TableHeader>
 				<TableRow>
 					<TableHead>Person</TableHead>
+					<TableHead>
+						<Select value={selectedCampus} onValueChange={setSelectedCampus}>
+							<SelectTrigger>
+								<SelectValue placeholder="Select a campus" />
+							</SelectTrigger>
+							<SelectContent>
+								{campus?.map((arg) => (
+									<SelectItem key={arg.id} value={arg.id}>
+										{arg.name}
+									</SelectItem>
+								))}
+							</SelectContent>
+						</Select>
+					</TableHead>
 					<TableHead>Local</TableHead>
 					<TableHead>Details</TableHead>
 					<TableHead>User</TableHead>
@@ -164,72 +184,80 @@ export const AlertTable: FC<Props> = ({ controllerMode }) => {
 				</TableRow>
 			</TableHeader>
 			<TableBody>
-				{data?.map((alert) => (
-					<TableRow key={alert.id}>
-						<Beep enable={isBeepEnable} />
+				{data
+					?.filter(
+						(arg) =>
+							selectedCampus === undefined ||
+							arg.local.campus.id === selectedCampus,
+					)
+					.map((alert) => (
+						<TableRow key={alert.id}>
+							<Beep enable={isBeepEnable} />
 
-						<TableCell>
-							<p className="text-xl font-bold">{alert.session.person.name}</p>
-							<p className="opacity-50">{alert.session.person.details}</p>
-						</TableCell>
-
-						<TableCell>
-							<p className="text-xl font-bold">{alert.local.name}</p>
-							<p className="opacity-50">{alert.local.details}</p>
-						</TableCell>
-
-						<TableCell>{alert.details}</TableCell>
-
-						<TableCell>
-							{controllerMode ? (
-								<UserSelect
-									id={alert.id}
-									userSelected={alert.user?.id}
-									users={users ?? []}
-								/>
-							) : (
-								alert.user?.name
-							)}
-						</TableCell>
-
-						<Timer createdAt={alert.createdAt} />
-
-						{controllerMode && (
-							<TableCell className="text-right">
-								<TooltipProvider>
-									<Tooltip>
-										<TooltipTrigger>
-											<Button
-												variant="outline"
-												size="icon"
-												type="button"
-												onClick={() => {
-													toast
-														.promise(
-															destroyAlertById(alert.id).then(
-																async () => await mutate(),
-															),
-															{
-																loading: "closing alert, please wait...",
-																success: "alert closed",
-																error: "unknown error",
-															},
-														)
-														.catch(console.error);
-												}}
-											>
-												<Cross1Icon className="h-4 w-4" />
-											</Button>
-										</TooltipTrigger>
-										<TooltipContent>
-											<p>Close</p>
-										</TooltipContent>
-									</Tooltip>
-								</TooltipProvider>
+							<TableCell>
+								<p className="text-xl font-bold">{alert.session.person.name}</p>
+								<p className="opacity-50">{alert.session.person.details}</p>
 							</TableCell>
-						)}
-					</TableRow>
-				))}
+
+							<TableCell>{alert.local.campus.name}</TableCell>
+
+							<TableCell>
+								<p className="text-xl font-bold">{alert.local.name}</p>
+								<p className="opacity-50">{alert.local.details}</p>
+							</TableCell>
+
+							<TableCell>{alert.details}</TableCell>
+
+							<TableCell>
+								{controllerMode ? (
+									<UserSelect
+										id={alert.id}
+										userSelected={alert.user?.id}
+										users={users ?? []}
+									/>
+								) : (
+									alert.user?.name
+								)}
+							</TableCell>
+
+							<Timer createdAt={alert.createdAt} />
+
+							{controllerMode && (
+								<TableCell className="text-right">
+									<TooltipProvider>
+										<Tooltip>
+											<TooltipTrigger>
+												<Button
+													variant="outline"
+													size="icon"
+													type="button"
+													onClick={() => {
+														toast
+															.promise(
+																destroyAlertById(alert.id).then(
+																	async () => await mutate(),
+																),
+																{
+																	loading: "closing alert, please wait...",
+																	success: "alert closed",
+																	error: "unknown error",
+																},
+															)
+															.catch(console.error);
+													}}
+												>
+													<Cross1Icon className="h-4 w-4" />
+												</Button>
+											</TooltipTrigger>
+											<TooltipContent>
+												<p>Close</p>
+											</TooltipContent>
+										</Tooltip>
+									</TooltipProvider>
+								</TableCell>
+							)}
+						</TableRow>
+					))}
 			</TableBody>
 		</Table>
 	);

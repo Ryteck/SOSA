@@ -144,8 +144,9 @@ const Page: FC<Params> = ({ params }) => {
 												key={local.id}
 												value={local.id}
 												aria-label="Toggle bold"
-												className="flex h-full flex-col"
+												className="flex h-full gap-2 flex-col p-2"
 											>
+												<p className="text-lg font-bold">{local.campus.name}</p>
 												<p className="text-2xl font-bold">{local.name}</p>
 												<p className="opacity-50">{local.details}</p>
 											</ToggleGroupItem>

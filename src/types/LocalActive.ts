@@ -1,5 +1,5 @@
-import type { Local } from "@prisma/client";
+import type LocalDetails from "@/types/LocalDetails";
 
-export default interface LocalActive extends Local {
+export default interface LocalActive extends LocalDetails {
 	active: boolean;
 }

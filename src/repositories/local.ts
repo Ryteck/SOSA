@@ -1,11 +1,13 @@
 import { prismaClient } from "@/services/prisma";
+import type LocalDetails from "@/types/LocalDetails";
 import type { Local } from "@prisma/client";
 
 const localModel = prismaClient.local;
 
-const listAllLocations = async (): Promise<Local[]> =>
+const listAllLocations = async (): Promise<LocalDetails[]> =>
 	await localModel.findMany({
-		orderBy: { name: "asc" },
+		orderBy: [{ campus: { name: "asc" } }, { name: "asc" }],
+		include: { campus: true },
 	});
 
 const listAllLocationsBySessionId = async (
