@@ -89,11 +89,21 @@ interface UserSelectProps {
 const UserSelect: FC<UserSelectProps> = ({ id, users, userSelected }) => {
 	const [userSel, setUserSel] = useState(userSelected);
 
+	const [userSelTemp, setUserSelTemp] = useState<undefined | string>(undefined);
+
+	useEffect(() => {
+		if (userSelected) {
+			setUserSel(userSelected);
+
+			if (userSelected === userSelTemp) setUserSelTemp(undefined);
+		}
+	}, [userSelected, userSelTemp]);
+
 	return (
 		<Select
-			value={userSel}
+			value={userSelTemp ?? userSel}
 			onValueChange={(value) => {
-				setUserSel(value);
+				setUserSelTemp(value);
 				updateAlertUserById(id, value).catch((err) => {
 					console.error(err);
 					setUserSel(userSel);
@@ -123,7 +133,7 @@ export const AlertTable: FC<Props> = ({ controllerMode }) => {
 		"api/alerts",
 		{
 			revalidateOnFocus: true,
-			refreshInterval: 5000,
+			refreshInterval: 3000,
 		},
 	);
 

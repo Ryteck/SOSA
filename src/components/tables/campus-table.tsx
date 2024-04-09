@@ -1,9 +1,7 @@
 "use client";
 
 import destroyCampusById from "@/actions/destroyCampusById";
-import destroyUserById from "@/actions/destroyUserById";
 import storeNewCampus from "@/actions/storeNewCampus";
-import storeNewUser from "@/actions/storeNewUser";
 import { Button } from "@/components/ui/button";
 import {
 	Form,
@@ -138,8 +136,8 @@ export const CampusTable: FC = () => {
 																	async () => await mutate(),
 																),
 																{
-																	loading: "deleting user, please wait...",
-																	success: "user deleted",
+																	loading: "deleting campus, please wait...",
+																	success: "campus deleted",
 																	error: "unknown error",
 																},
 															)
