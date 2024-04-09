@@ -89,21 +89,14 @@ interface UserSelectProps {
 const UserSelect: FC<UserSelectProps> = ({ id, users, userSelected }) => {
 	const [userSel, setUserSel] = useState(userSelected);
 
-	const [userSelTemp, setUserSelTemp] = useState<undefined | string>(undefined);
-
 	useEffect(() => {
-		if (userSelected) {
-			setUserSel(userSelected);
-
-			if (userSelected === userSelTemp) setUserSelTemp(undefined);
-		}
-	}, [userSelected, userSelTemp]);
+		if (userSelected) setUserSel(userSelected);
+	}, [userSelected]);
 
 	return (
 		<Select
-			value={userSelTemp ?? userSel}
+			value={userSel}
 			onValueChange={(value) => {
-				setUserSelTemp(value);
 				updateAlertUserById(id, value).catch((err) => {
 					console.error(err);
 					setUserSel(userSel);
