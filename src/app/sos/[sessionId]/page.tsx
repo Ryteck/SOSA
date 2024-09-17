@@ -128,7 +128,7 @@ const Page: FC<Params> = ({ params }) => {
 
 				{data?.alerts.length === 0 ? (
 					<>
-						<ScrollArea className="w-4/5">
+						<ScrollArea className="w-screen">
 							<Card className="p-8">
 								{data.locations.length === 0 ? (
 									<Skeleton className="m-auto h-40 w-40" />
@@ -137,7 +137,9 @@ const Page: FC<Params> = ({ params }) => {
 										variant="outline"
 										type="single"
 										value={selectedLocal}
-										onValueChange={setSelectedLocal}
+										onValueChange={(value) => {
+											if (value !== "") setSelectedLocal(value);
+										}}
 									>
 										{data.locations.map((local) => (
 											<ToggleGroupItem
