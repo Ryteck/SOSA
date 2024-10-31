@@ -5,4 +5,4 @@ export async function GET(): Promise<Response> {
 	return Response.json(alerts);
 }
 
-export const revalidate = 0;
+export const revalidate = 10;
