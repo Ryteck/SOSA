@@ -1,5 +1,6 @@
 "use client";
 
+import destroyAlertById from "@/actions/destroyAlertById";
 import storeNewAlert from "@/actions/storeNewAlert";
 import { ThemeModeToggle } from "@/components/theme-mode-toggle";
 import { Badge } from "@/components/ui/badge";
@@ -24,10 +25,19 @@ import type FullSessionData from "@/types/FullSessionData";
 import { LightningBoltIcon } from "@radix-ui/react-icons";
 import { type FC, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import type { KeyedMutator } from "swr";
 
 const pad2 = (arg: number): string => arg.toString().padStart(2, "0");
 
-const Alert: FC<AlertDetails> = ({ local, details, createdAt, user }) => {
+interface AlertProps {
+	alert: AlertDetails;
+	mutate: KeyedMutator<FullSessionData | null>;
+}
+
+const Alert: FC<AlertProps> = ({
+	alert: { id, local, details, createdAt, user },
+	mutate,
+}) => {
 	const [timeDifference, setTimeDifference] = useState({
 		hours: 0,
 		minutes: 0,
@@ -76,6 +86,42 @@ const Alert: FC<AlertDetails> = ({ local, details, createdAt, user }) => {
 			<p className="opacity-70">{details}</p>
 
 			<p>{`${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`}</p>
+
+			<Dialog>
+				<DialogTrigger asChild>
+					<Button variant="destructive">Cancel</Button>
+				</DialogTrigger>
+				<DialogContent className="sm:max-w-[425px]">
+					<DialogHeader>
+						<DialogTitle>Confirm?</DialogTitle>
+						<DialogDescription>
+							Do you confirm the cancellation of SOS?
+						</DialogDescription>
+					</DialogHeader>
+
+					<div>{details}</div>
+
+					<DialogFooter>
+						<Button
+							variant="destructive"
+							onClick={() => {
+								toast
+									.promise(
+										destroyAlertById(id).then(async () => await mutate()),
+										{
+											loading: "closing alert, please wait...",
+											success: "alert closed",
+											error: "unknown error",
+										},
+									)
+									.catch(console.error);
+							}}
+						>
+							Confirm
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
 		</>
 	);
 };
@@ -231,7 +277,7 @@ const Page: FC<Params> = ({ params }) => {
 						</Dialog>
 					</>
 				) : (
-					data !== undefined && <Alert {...data.alerts[0]} />
+					data !== undefined && <Alert alert={data.alerts[0]} mutate={mutate} />
 				)}
 
 				<ThemeModeToggle />
